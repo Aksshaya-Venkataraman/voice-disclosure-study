@@ -9,3 +9,4 @@ pytest-cov==7.1.0
 ruff==0.17.5
 bandit==1.9.4
 pip-audit==2.10.1
+uv==0.13.9  # used by scripts/check_locks.sh to re-resolve every lock file

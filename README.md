@@ -159,7 +159,7 @@ For local development without Rasa, set `INTERVIEW_ENGINE=scripted`.
 Every push runs these jobs:
 
 - **Lint and SAST:** ruff and bandit.
-- **Dependency audit:** pip-audit on every lock file.
+- **Dependency audit:** pip-audit on every lock file, plus a check that every lock file still matches its inputs (`scripts/check_locks.sh`).
 - **Secret scan:** gitleaks over the full git history.
 - **Tests:** the gateway and analysis suites.
 - **Migrations:** Alembic upgrade, downgrade and upgrade again on PostgreSQL.

@@ -28,6 +28,8 @@ jobs:
         run: |
           ruff check .
           ruff format --check .
+      - name: Lock files match their inputs (.in files and Rasa overrides)
+        run: scripts/check_locks.sh
       - name: Bandit (static security analysis)
         run: bandit -c pyproject.toml -r gateway/gateway analysis/disclosure_analysis interview rasa/actions scripts
       - name: pip-audit - gateway, analysis and dev tools (must be clean)

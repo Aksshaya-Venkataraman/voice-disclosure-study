@@ -2,10 +2,12 @@ version: 2
 updates:
   - package-ecosystem: pip
     directories: ["/gateway", "/analysis", "/"]
+    # rasa/ is excluded: Rasa Open Source 3.6 pins its dependencies tightly and
+    # rasa/overrides.txt holds the newest versions that still work with it
+    # (newer ones break TensorFlow 2.12 or Rasa's pkg_resources import).
+    # Advisories there are reviewed by hand (rasa/audit-exceptions.txt).
+    exclude-paths: ["rasa/**"]
     schedule: { interval: weekly }
-  # rasa/ is deliberately not listed for pip: Rasa Open Source 3.6 pins its
-  # dependencies tightly. Security overrides are maintained by hand in
-  # rasa/overrides.txt and reviewed advisories in rasa/audit-exceptions.txt.
   - package-ecosystem: docker
     directories: ["/gateway", "/rasa"]
     schedule: { interval: weekly }
