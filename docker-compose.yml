@@ -1,0 +1,144 @@
+# Production stack:
+#
+#   participant browser -> Caddy (HTTPS) -> gateway -> Rasa -> action server
+#                                              |-> PostgreSQL
+#
+# Only Caddy publishes ports. Every other service sits on internal networks
+# with no route to the internet; Rasa and the action server can talk only to
+# each other and to the gateway.
+#
+#   python scripts/generate_env.py --domain study.example.org --contact you@example.org
+#   docker compose up -d --build
+#
+# Voice answers (Google Speech-to-Text) are added by docker-compose.speech.yml;
+# see the README. Without it participants type their answers.
+
+name: voice-disclosure
+
+# Bounded logs: Docker's default json-file driver otherwise grows without limit.
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-hardening: &hardening
+  restart: unless-stopped
+  logging: *logging
+  read_only: true
+  tmpfs: ["/tmp"]
+  security_opt: ["no-new-privileges:true"]
+  cap_drop: ["ALL"]
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    logging: *logging
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: ["ALL"]
+    cap_add: ["NET_BIND_SERVICE"]
+    depends_on:
+      gateway:
+        condition: service_healthy
+    networks: [edge, web]
+
+  gateway:
+    <<: *hardening
+    image: voice-disclosure-gateway:local
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    environment:
+      ENVIRONMENT: production
+      DATABASE_URL: postgresql+psycopg://${APP_DB_USER:?}:${APP_DB_PASSWORD:?}@db:5432/${APP_DB_NAME:?}
+      RESEARCHER_TOKEN: ${RESEARCHER_TOKEN:?}
+      PUBLIC_URL: https://${DOMAIN}
+      ALLOWED_HOSTS: ${DOMAIN},gateway,localhost,127.0.0.1
+      CONTACT_EMAIL: ${CONTACT_EMAIL:?set CONTACT_EMAIL in .env}
+      STUDY_TITLE: "${STUDY_TITLE:-Interview study: how interviewer voices affect answers}"
+      SHOW_PROMPT_TEXT: ${SHOW_PROMPT_TEXT:-false}
+      INTERVIEW_ENGINE: rasa
+      RASA_URL: http://rasa:5005
+      ASR_PROVIDER: disabled
+      # The gateway port is never published; only Caddy can reach it, so the
+      # X-Forwarded-For header Caddy sets is trusted for per-client limits.
+      FORWARDED_ALLOW_IPS: "*"
+    expose: ["8000"]
+    depends_on:
+      db:
+        condition: service_healthy
+      rasa:
+        condition: service_healthy
+    networks: [web, data, bot]
+
+  rasa:
+    <<: *hardening
+    image: voice-disclosure-rasa:local
+    build:
+      context: .
+      dockerfile: rasa/Dockerfile
+      target: server
+    expose: ["5005"]
+    depends_on:
+      actions:
+        condition: service_healthy
+    networks: [bot, rasa-actions]
+
+  actions:
+    <<: *hardening
+    image: voice-disclosure-actions:local
+    build:
+      context: .
+      dockerfile: rasa/Dockerfile
+      target: actions
+    expose: ["5055"]
+    networks: [rasa-actions]
+
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD:?}
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+      APP_DB_USER: ${APP_DB_USER:?}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?}
+      APP_DB_NAME: ${APP_DB_NAME:?}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./deploy/postgres-init:/docker-entrypoint-initdb.d:ro
+    security_opt: ["no-new-privileges:true"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [data]
+
+networks:
+  edge: {}            # Caddy <-> internet (also used for Let's Encrypt)
+  web:                # Caddy -> gateway
+    internal: true
+  data:               # gateway -> PostgreSQL
+    internal: true
+  bot:                # gateway -> Rasa
+    internal: true
+  rasa-actions:       # Rasa -> action server
+    internal: true
+
+volumes:
+  db_data: {}
+  caddy_data: {}
+  caddy_config: {}

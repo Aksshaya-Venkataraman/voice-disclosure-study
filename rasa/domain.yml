@@ -1,0 +1,37 @@
+version: "3.1"
+
+intents:
+  - greet
+  - mood_great
+  - mood_unhappy
+  - affirm
+  - deny
+  - answer
+  - nlu_fallback
+
+slots:
+  interview_stage:
+    type: text
+    initial_value: mood
+    influence_conversation: false
+    mappings:
+      - type: custom
+  block_index:
+    type: float
+    initial_value: 0
+    influence_conversation: false
+    mappings:
+      - type: custom
+  question_index:
+    type: float
+    initial_value: 0
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+actions:
+  - action_interview_step
+
+session_config:
+  session_expiration_time: 240
+  carry_over_slots_to_new_session: true

@@ -1,0 +1,7 @@
+# Secret scanning config used by gitleaks in CI (full history).
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Intentional fake credentials used only by automated tests"
+paths = ['''(^|/)tests/''', '''(^|/)conftest\.py$''']

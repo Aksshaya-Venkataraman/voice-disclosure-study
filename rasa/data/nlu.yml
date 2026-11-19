@@ -1,0 +1,130 @@
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - hi
+      - hello
+      - hey
+      - hello there
+      - hi there
+      - good morning
+      - good afternoon
+      - good evening
+      - hey, hello
+      - hiya
+
+  - intent: mood_great
+    examples: |
+      - I'm good
+      - I am good thanks
+      - great, thank you
+      - very well thanks
+      - I'm doing great
+      - doing well, thanks for asking
+      - not bad at all
+      - pretty good
+      - fine thanks
+      - I'm fine
+      - all good
+      - I'm feeling great today
+      - really well
+      - excellent
+      - I'm okay thanks
+      - good, and you?
+      - amazing
+      - quite well actually
+      - I'm happy today
+      - wonderful thank you
+
+  - intent: mood_unhappy
+    examples: |
+      - not great
+      - I'm not doing well
+      - pretty bad actually
+      - I'm tired
+      - I feel awful
+      - not so good
+      - a bit stressed
+      - I've had a rough day
+      - terrible
+      - honestly not great
+      - I'm exhausted
+      - kind of down today
+      - I'm sad
+      - could be better
+      - bad day
+      - I feel sick
+      - I'm worried about things
+      - not well at all
+      - meh
+      - struggling a bit
+
+  - intent: affirm
+    examples: |
+      - yes
+      - yeah
+      - yep
+      - yes I am
+      - a little bit
+      - a bit, yes
+      - I am quite nervous
+      - definitely
+      - of course
+      - sure
+      - absolutely
+      - yes very
+      - kind of
+      - a little
+      - I guess so
+      - yes let's go
+      - sounds good
+      - ok let's start
+      - ready
+      - I'm ready
+
+  - intent: deny
+    examples: |
+      - no
+      - nope
+      - not really
+      - not at all
+      - no I'm fine
+      - no, I'm relaxed
+      - I'm not nervous
+      - never
+      - not nervous
+      - no not really
+      - nah
+      - I don't think so
+      - not at the moment
+      - no, I feel calm
+      - not much
+
+  - intent: answer
+    examples: |
+      - I worked on a web application for a local charity and I led the backend work
+      - In my last job I had to rebuild the reporting system after a failed migration
+      - I usually read documentation and take short online courses every month
+      - The hardest thing for me is learning new maths-heavy topics
+      - We once had a release deadline that kept me up for two nights and I was exhausted
+      - I proposed a social media campaign that my manager did not like at first
+      - I try to listen to everyone first and then find what we agree on
+      - A presentation I gave went badly and I felt embarrassed for days
+      - I prefer working with a team because I enjoy sharing ideas
+      - I would compare the sources, check how each number was calculated and ask the authors
+      - I once paid a bill twice by mistake and had to sort it out with the bank
+      - I am quite careful with risk, I like to have a backup plan
+      - I test my assumptions with a small experiment before committing
+      - I would be honest but gentle and make sure they have support afterwards
+      - When work gets too much I go for long walks and talk to my family
+      - For me balance means having evenings that are completely free from work
+      - I asked a friend for help when I was struggling with my studies
+      - It depends on the situation but usually I take a structured approach
+      - That's a difficult question, I think I would first gather more information
+      - My background is in computer science and I have worked as a developer for two years
+      - Honestly I sometimes find it hard to ask for help because I don't want to bother people
+      - We had a conflict in my group project and I tried to mediate between two people
+      - I made a decision with incomplete data and it turned out to be wrong, so I learned to check sources
+      - I have been working on a machine learning project that predicts machine failures
+      - Money has been tight at times and I had to learn to budget carefully

@@ -1,0 +1,8 @@
+# Offline analysis of the exported answers. Regenerate the lock file with:
+#   uv pip compile analysis/requirements.in --generate-hashes \
+#     --python-version 3.13 --python-platform x86_64-unknown-linux-gnu -o analysis/requirements.txt
+pandas==3.1.1
+numpy==2.5.5
+scipy==1.18.1
+statsmodels==0.15.0
+matplotlib==3.11.2

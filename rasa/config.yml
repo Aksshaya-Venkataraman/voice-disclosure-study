@@ -1,0 +1,28 @@
+recipe: default.v1
+assistant_id: voice-disclosure-interviewer
+language: en
+
+# NLU only has to tell warm-up replies apart (mood, yes/no); interview answers
+# are free text and always move the conversation forward.
+pipeline:
+  - name: WhitespaceTokenizer
+  - name: RegexFeaturizer
+  - name: LexicalSyntacticFeaturizer
+  - name: CountVectorsFeaturizer
+  - name: CountVectorsFeaturizer
+    analyzer: char_wb
+    min_ngram: 1
+    max_ngram: 4
+  - name: DIETClassifier
+    epochs: 80
+    constrain_similarities: true
+    random_seed: 42
+  - name: FallbackClassifier
+    threshold: 0.4
+
+# Dialogue is fully scripted: every user turn runs the interview step action.
+policies:
+  - name: RulePolicy
+    core_fallback_threshold: 0.3
+    core_fallback_action_name: action_interview_step
+    enable_fallback_prediction: true

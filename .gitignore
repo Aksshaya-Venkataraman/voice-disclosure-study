@@ -1,0 +1,37 @@
+# Secrets - never commit
+.env
+.env.*
+!.env.example
+secrets/*
+!secrets/README.md
+*.pem
+*.key
+
+# Participant data and analysis output - store only in approved locations
+*.csv
+/report/
+analysis/report/
+/data/
+
+# Rasa build output
+rasa/models/
+rasa/.rasa/
+rasa/results/
+rasa/graph.html
+rasa/story_graph.dot
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store

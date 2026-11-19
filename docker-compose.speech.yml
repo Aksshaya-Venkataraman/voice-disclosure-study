@@ -1,0 +1,31 @@
+# Adds voice answers via Google Cloud Speech-to-Text.
+#
+#   1. Create a Google Cloud service account with the "Cloud Speech Client"
+#      role only, download its JSON key to secrets/google-credentials.json and
+#      restrict it to the gateway's container user:
+#         sudo chown 10001:10001 secrets/google-credentials.json
+#         sudo chmod 0400 secrets/google-credentials.json
+#   2. Run: docker compose -f docker-compose.yml -f docker-compose.speech.yml up -d --build
+#      (or put COMPOSE_FILE=docker-compose.yml:docker-compose.speech.yml in .env,
+#      which `generate_env.py --speech` does for you).
+#
+# Audio is sent to Google for transcription and then discarded; it is never
+# written to disk or to the database.
+
+services:
+  gateway:
+    environment:
+      ASR_PROVIDER: google
+      ASR_LANGUAGE: ${ASR_LANGUAGE:-en-GB}
+      GOOGLE_APPLICATION_CREDENTIALS: /run/secrets/google_credentials
+    secrets: [google_credentials]
+    # The gateway is the only service that needs to reach the internet
+    # (speech.googleapis.com).
+    networks: [egress]
+
+networks:
+  egress: {}
+
+secrets:
+  google_credentials:
+    file: ${GOOGLE_CREDENTIALS_FILE:-./secrets/google-credentials.json}

@@ -1,0 +1,4 @@
+# Custom action server. Regenerate the lock file with:
+#   uv pip compile rasa/actions/requirements.in --generate-hashes \
+#     --python-version 3.10 --python-platform x86_64-unknown-linux-gnu -o rasa/actions/requirements.txt
+rasa-sdk==3.6.2

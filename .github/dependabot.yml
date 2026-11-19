@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: pip
+    directories: ["/gateway", "/analysis", "/"]
+    schedule: { interval: weekly }
+  # rasa/ is deliberately not listed for pip: Rasa Open Source 3.6 pins its
+  # dependencies tightly. Security overrides are maintained by hand in
+  # rasa/overrides.txt and reviewed advisories in rasa/audit-exceptions.txt.
+  - package-ecosystem: docker
+    directories: ["/gateway", "/rasa"]
+    schedule: { interval: weekly }
+    ignore:
+      # Rasa 3.6 needs Python 3.10, which only Ubuntu 22.04 ships with security support.
+      - dependency-name: ubuntu
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+  - package-ecosystem: docker-compose
+    directory: /
+    schedule: { interval: weekly }
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: weekly }

@@ -1,0 +1,43 @@
+version: "3.1"
+
+stories:
+  - story: positive warm-up then first answers
+    steps:
+      - user: |
+          I'm doing great thanks
+        intent: mood_great
+      - action: action_interview_step
+      - user: |
+          not really
+        intent: deny
+      - action: action_interview_step
+      - user: |
+          yes let's go
+        intent: affirm
+      - action: action_interview_step
+      - user: |
+          I worked on a mobile app for a small business and handled the database
+        intent: answer
+      - action: action_interview_step
+
+  - story: unhappy and nervous participant
+    steps:
+      - user: |
+          honestly not great
+        intent: mood_unhappy
+      - action: action_interview_step
+      - user: |
+          a little bit
+        intent: affirm
+      - action: action_interview_step
+      - user: |
+          ok
+        intent: affirm
+      - action: action_interview_step
+
+  - story: greeting first
+    steps:
+      - user: |
+          hello
+        intent: greet
+      - action: action_interview_step

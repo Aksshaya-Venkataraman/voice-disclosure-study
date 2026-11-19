@@ -1,0 +1,5 @@
+# Rasa Open Source 3.6.21 is the final open-source release and supports
+# Python 3.8-3.10 only. Regenerate the lock file with:
+#   uv pip compile rasa/requirements.in --override rasa/overrides.txt --generate-hashes \
+#     --python-version 3.10 --python-platform x86_64-unknown-linux-gnu -o rasa/requirements.txt
+rasa==3.6.21

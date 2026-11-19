@@ -1,0 +1,38 @@
+version: "3.1"
+
+# Every user message advances the scripted interview by one step.
+rules:
+  - rule: greet advances the interview
+    steps:
+      - intent: greet
+      - action: action_interview_step
+
+  - rule: mood_great advances the interview
+    steps:
+      - intent: mood_great
+      - action: action_interview_step
+
+  - rule: mood_unhappy advances the interview
+    steps:
+      - intent: mood_unhappy
+      - action: action_interview_step
+
+  - rule: affirm advances the interview
+    steps:
+      - intent: affirm
+      - action: action_interview_step
+
+  - rule: deny advances the interview
+    steps:
+      - intent: deny
+      - action: action_interview_step
+
+  - rule: answer advances the interview
+    steps:
+      - intent: answer
+      - action: action_interview_step
+
+  - rule: nlu_fallback advances the interview
+    steps:
+      - intent: nlu_fallback
+      - action: action_interview_step

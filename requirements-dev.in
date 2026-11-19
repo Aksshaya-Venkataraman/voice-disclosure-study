@@ -1,0 +1,11 @@
+# Everything CI needs to lint, audit and test the Python 3.13 parts
+# (gateway, analysis, interview script). Regenerate with:
+#   uv pip compile requirements-dev.in --generate-hashes \
+#     --python-version 3.13 --python-platform x86_64-unknown-linux-gnu -o requirements-dev.txt
+-r gateway/requirements.in
+-r analysis/requirements.in
+pytest==9.2.0
+pytest-cov==7.1.0
+ruff==0.17.5
+bandit==1.9.4
+pip-audit==2.10.1

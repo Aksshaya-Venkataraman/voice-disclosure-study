@@ -1,0 +1,116 @@
+# Reviewed advisories in the Rasa images that cannot be fixed without breaking
+# Rasa Open Source 3.6 (the final open-source release, Python <= 3.10).
+# CI fails on any advisory NOT listed here. Details: SECURITY.md.
+# Format: one advisory ID per line; '#' starts a comment.
+
+# dnspython 2.8.0: dnspython 2.9 requires Python >= 3.11. Only used by pymongo for mongodb+srv lookups; MongoDB is not used.
+CVE-2026-114605
+CVE-2026-128089
+
+# filelock 4.1.0: filelock 4.2 requires Python >= 3.11. Lock-file races need a shared, multi-user writable directory; containers are read-only with a private tmpfs and one unprivileged user.
+CVE-2026-112906
+CVE-2026-112907
+CVE-2026-112908
+CVE-2026-112909
+CVE-2026-112910
+CVE-2026-112911
+CVE-2026-112912
+CVE-2026-112913
+CVE-2026-112914
+CVE-2026-112915
+CVE-2026-112934
+CVE-2026-112935
+CVE-2026-112937
+CVE-2026-112938
+CVE-2026-112939
+CVE-2026-112940
+CVE-2026-112941
+
+# keras 2.12.0: TensorFlow 2.12 requires keras<2.13. The advisories need loading crafted model files or archives (get_file, load_model); only the image's own model is loaded.
+CVE-2025-12060
+PYSEC-2025-121
+PYSEC-2025-76
+PYSEC-2026-1487
+PYSEC-2026-2324
+PYSEC-2026-2547
+PYSEC-2026-3629
+PYSEC-2026-3630
+PYSEC-2026-3631
+PYSEC-2026-3632
+PYSEC-2026-3633
+PYSEC-2026-3634
+PYSEC-2026-369
+PYSEC-2026-3856
+
+# pillow 12.3.0: Pillow 13 requires Python >= 3.11. The advisories need opening or saving crafted image/PDF files; the running services never handle images (Pillow is only a matplotlib dependency used for `rasa test` plots at build time).
+CVE-2026-112390
+CVE-2026-112391
+CVE-2026-112393
+CVE-2026-112395
+CVE-2026-112399
+CVE-2026-112400
+CVE-2026-112401
+CVE-2026-112404
+CVE-2026-112406
+CVE-2026-112891
+CVE-2026-112892
+CVE-2026-112893
+CVE-2026-112894
+CVE-2026-112895
+CVE-2026-112897
+CVE-2026-112899
+CVE-2026-112900
+CVE-2026-128066
+CVE-2026-128067
+CVE-2026-96638
+CVE-2026-96640
+CVE-2026-96778
+GHSA-78g4-xqwv-q3g8
+PYSEC-2026-4326
+PYSEC-2026-4327
+PYSEC-2026-4328
+PYSEC-2026-4329
+PYSEC-2026-4330
+PYSEC-2026-4331
+PYSEC-2026-4332
+PYSEC-2026-4333
+PYSEC-2026-4334
+PYSEC-2026-4335
+PYSEC-2026-4336
+PYSEC-2026-4337
+PYSEC-2026-4338
+PYSEC-2026-4339
+PYSEC-2026-4340
+PYSEC-2026-4341
+PYSEC-2026-4342
+PYSEC-2026-4343
+PYSEC-2026-4363
+
+# protobuf 4.25.8: TensorFlow 2.12 requires protobuf<5 and 4.25.8 is the newest 4.x. json_format.ParseDict recursion with nested Any messages: no untrusted data is parsed into protobuf messages.
+PYSEC-2026-1805
+
+# sanic 21.12.2: Rasa 3.6 and rasa-sdk 3.6 require sanic 21.12. Chunked-trailer request smuggling needs an attacker-controlled HTTP client; both services are reachable only on internal Docker networks and their only clients (gateway -> Rasa, Rasa -> actions) send fixed-length JSON bodies.
+PYSEC-2026-4162
+
+# sanic-cors 2.0.1, 2.2.0: No fix released. CORS is not enabled (Rasa runs without --cors) and neither service is reachable from a browser.
+PYSEC-2026-3539
+
+# scikit-learn 1.1.3: Rasa requires scikit-learn<1.2. TfidfVectorizer token leakage: TfidfVectorizer is not used and the training data is public in this repository.
+PYSEC-2024-110
+
+# setuptools 81.0.0: setuptools >= 82 removed pkg_resources, which Rasa imports. Remaining advisories affect sdist building and Windows wheel installs only, never the running service.
+GHSA-xmj3-9gf7-h52w
+PYSEC-2026-3447
+
+# skops 0.9.0: Rasa pins skops==0.9.0. The advisories need loading an untrusted model file; the only model is trained inside the image from this repository and model upload is off (no --enable-api).
+PYSEC-2026-1925
+PYSEC-2026-1926
+PYSEC-2026-1927
+PYSEC-2026-1928
+
+# tensorflow 2.12.0: CVE-2023-33976 (segfault in array_ops.upper_bound on a malformed tensor) is not reachable from text input. The fixed 2.12.1 caps typing-extensions<4.6, which would force cryptography down to 45.x with 13 advisories.
+PYSEC-2026-1962
+PYSEC-2026-3190
+
+# wheel 0.45.1: wheel >= 0.46.2 requires packaging >= 24, but Rasa needs packaging < 21 (LegacyVersion). The advisory is in the `wheel unpack` command, which is never run.
+CVE-2026-24049

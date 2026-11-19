@@ -1,0 +1,20 @@
+# Keep secrets, history and local artefacts out of every build context.
+.git
+.github
+.env
+.env.*
+secrets
+**/__pycache__
+**/*.py[cod]
+**/.venv
+**/.pytest_cache
+**/.ruff_cache
+rasa/models
+rasa/.rasa
+rasa/results
+analysis
+report
+data
+*.csv
+*.md
+!gateway/static/**
