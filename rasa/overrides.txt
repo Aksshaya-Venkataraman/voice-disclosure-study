@@ -4,7 +4,7 @@
 # Advisories that cannot be fixed on Python 3.10 / TensorFlow 2.12 are listed,
 # with why they are not reachable here, in SECURITY.md.
 cryptography==50.0.2        # 2026 cryptography advisories (tensorflow 2.12.1 would force 45.x, see SECURITY.md)
-protobuf==4.25.8            # CVE-2025-4565 (rasa pins 4.23.3; tensorflow needs <5)
+protobuf==7.36.2            # CVE-2025-4565 (rasa pins 4.23.3; tensorflow needs <5)
 pydantic==1.10.27           # CVE-2024-3772 (rasa pins <1.10.10)
 aiohttp==3.14.5             # 2024-2026 aiohttp advisories (rasa pins <3.10)
 pymongo==4.18.3             # CVE-2024-5629 and 2026 advisories (MongoDB is not used here)
