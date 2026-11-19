@@ -115,7 +115,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: docker/setup-buildx-action@v3
       - name: Build gateway image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: gateway/Dockerfile
@@ -124,7 +124,7 @@ jobs:
           cache-from: type=gha,scope=gateway
           cache-to: type=gha,mode=max,scope=gateway
       - name: Build Rasa image (validates the data, trains the model and runs `rasa test core`)
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: rasa/Dockerfile
@@ -134,7 +134,7 @@ jobs:
           cache-from: type=gha,scope=rasa
           cache-to: type=gha,mode=max,scope=rasa
       - name: Build action server image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: rasa/Dockerfile
